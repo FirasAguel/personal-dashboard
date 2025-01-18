@@ -17,24 +17,20 @@ const fetchCoordinates = (city: string): { latitude: number; longitude: number }
     "Essen": { latitude: 51.4508, longitude: 7.0131 },
     "New York": { latitude: 40.7128, longitude: -74.006 },
   };
-  return cityCoordinates[city] || { latitude: 0, longitude: 0 }; // Default to (0,0) for unknown cities
+  return cityCoordinates[city] || { latitude: 0, longitude: 0 };
 };
 
 const getCurrentTimeFromGMT = (gmtOffset: string): string => {
 
   const normalizedOffset = gmtOffset === "GMT" ? "GMT+0" : gmtOffset;
 
-  // Extract the numeric part of the offset (e.g., "+9" or "-1")
   const offsetInHours = parseInt(normalizedOffset.replace("GMT", ""), 10);
 
-  // Get the current UTC time
   const now = new Date();
   const utcTime = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
 
-  // Apply the offset
   const localTime = new Date(utcTime + offsetInHours * 60 * 60 * 1000);
 
-  // Format the time as "HH:MM"
   const hours = localTime.getHours().toString().padStart(2, "0");
   const minutes = localTime.getMinutes().toString().padStart(2, "0");
 
@@ -52,12 +48,11 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
     const fetchWeather = async () => {
       try {
         setLoading(true);
-        if(latitude===0 && longitude === 0)
+        if(latitude===0 && longitude === 0) //大西洋の中
           throw(city + " is not supported")
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation&hourly=temperature_2m&&daily=sunrise,sunset&timezone=auto`;
         const response = await fetch(apiUrl);
         const data = await response.json();
-        //console.log(data.daily.sunrise[0].split('T')[1]);
         console.log(data);
         setWeather(data);
       } catch (err) {
@@ -100,14 +95,3 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
 };
 
 export default WeatherWidget;
-
-
-
-{/*
-      <p>{weather?.current.time.replace('T',' ')}</p>
-      {weather?.current.time.split('T').map((part : string, index : number) => (
-        <React.Fragment key={index}>
-          <p>{part}</p>
-        </React.Fragment>
-      ))}
-      */}
