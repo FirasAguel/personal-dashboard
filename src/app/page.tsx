@@ -81,7 +81,7 @@ export default function Home() {
       <WeatherWidget city="Gabes" />
       <WeatherWidget city="Tokyo" />
       <WeatherWidget city="Paris" />
-      <WeatherWidget city="London" />
+      <WeatherWidget city="AAAA" />
       <div className="add-widget widget" onClick={addWidget}>
         + Add Widget
       </div>
