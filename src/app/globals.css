@@ -3,12 +3,24 @@
   --foreground: #171717;
 }
 
+.dark{
+  --background: #191919 
+}
+
+.widget {
+  max-width: 400px; 
+  max-height: 300px; 
+  min-height: 150px;
+}
+
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+*/
 
 html,
 body {
@@ -39,4 +51,28 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.add-widget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d3d3d3;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-widget:hover {
+  background-color: #bbb;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background-color: #f0f4f8;
+  min-height: 100vh;
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import WeatherCard from "@/components/WeatherCard";
+import WeatherWidget from "@/components/WeatherWidget";
 
 export default function Home() {
   const [weather, setWeather] = useState<any>(null);
@@ -43,7 +44,26 @@ export default function Home() {
     return `https://openweathermap.org/img/wn/${code}.png`;
   }
 
+  const [widgets, setWidgets] = useState([
+    { id: 1, type: "weather", city: "Tokyo" },
+    { id: 2, type: "weather", city: "Gabes" },
+  ]);
+
+  const addWidget = () => {
+    const newWidget = {
+      id: widgets.length + 1,
+      type: "weather",
+      city: "London", // Default city for new widget
+    };
+    setWidgets([...widgets, newWidget]);
+  };
+
+  
+
+
   return (
+    <>
+    {/*
     <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", padding: "20px"}}>
       {weather ? (
         <WeatherCard
@@ -56,6 +76,17 @@ export default function Home() {
         <p>Loading...</p>
       )}
     </div>
+      */}
+    <div className="dashboard">
+      <WeatherWidget city="Gabes" />
+      <WeatherWidget city="Tokyo" />
+      <WeatherWidget city="Paris" />
+      <WeatherWidget city="London" />
+      <div className="add-widget widget" onClick={addWidget}>
+        + Add Widget
+      </div>
+    </div>
+  </>
   );
 }
 
