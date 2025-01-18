@@ -16,12 +16,6 @@
   justify-content: center;
 }
 
-.weather-widget:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-
 .weather-widget.day {
   background: linear-gradient(135deg, #87ceeb, #f0e68c); /* Sky blue to light yellow */
   color: #333; /* Darker text color for better contrast */

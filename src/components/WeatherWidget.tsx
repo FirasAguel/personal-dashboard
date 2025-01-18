@@ -79,7 +79,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
   }
 
   return (
-    <div className={`${styles['weather-widget']} ${weather?.current.is_day === 1 ? styles.day : styles.night}`}>
+    <div className={`${styles['weather-widget']} widget ${weather?.current.is_day === 1 ? styles.day : styles.night}`}>
       <div className={styles.minimal}>
         <h2>{city}</h2>
         <h3>{getCurrentTimeFromGMT(weather?.timezone_abbreviation)}</h3>
