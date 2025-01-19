@@ -52,7 +52,7 @@ jobs:
         run: pnpm test
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: lint-and-test
 
     steps:
