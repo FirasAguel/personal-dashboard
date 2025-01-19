@@ -49,14 +49,14 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
       try {
         setLoading(true);
         if(latitude===0 && longitude === 0) //大西洋の中
-          throw(city + " is not supported")
+          throw new Error(`${city} is not supported`);
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation&hourly=temperature_2m&&daily=sunrise,sunset&timezone=auto`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         console.log(data);
         setWeather(data);
       } catch (err) {
-        setError(err === null ? "Failed to fetch weather data" : String(err) );
+        setError(err instanceof Error ? err.message : "Failed to fetch weather data");
       } finally {
         setLoading(false);
       }
