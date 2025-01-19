@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WeatherWidget from '@/components/WeatherWidget';
 import Modal from '@/components/Modal';
 import { cityCoordinates } from '../../config/cityCoordinates';

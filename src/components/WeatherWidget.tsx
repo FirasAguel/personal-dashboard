@@ -5,6 +5,19 @@ import { cityCoordinates } from '../../config/cityCoordinates';
 interface WeatherWidgetProps {
   city: string;
 }
+interface WeatherData {
+  current: {
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    apparent_temperature: number;
+    is_day: number;
+  };
+  daily: {
+    sunrise: string[];
+    sunset: string[];
+  };
+  timezone_abbreviation: string;
+}
 
 const fetchCoordinates = (city: string) =>
   cityCoordinates[city] || { latitude: 0, longitude: 0 };
@@ -26,7 +39,7 @@ const getCurrentTimeFromGMT = (gmtOffset: string): string => {
 };
 
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,11 +50,10 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
       try {
         setLoading(true);
         if (latitude === 0 && longitude === 0)
-          //大西洋の中
           throw new Error(`${city} is not supported`);
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation&hourly=temperature_2m&&daily=sunrise,sunset&timezone=auto`;
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        const data: WeatherData = await response.json(); // Explicitly type the response
         setWeather(data);
       } catch (err) {
         setError(
@@ -75,10 +87,12 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
     >
       <div className={styles.minimal}>
         <h2>{city}</h2>
-        <h3>{getCurrentTimeFromGMT(weather?.timezone_abbreviation)}</h3>
+        <h3>
+          {getCurrentTimeFromGMT(weather?.timezone_abbreviation ?? 'GMT')}
+        </h3>
         <p className={styles.hideOnHover}>
-          {Math.round(weather?.current.apparent_temperature)}°{' '}
-          {weather?.current.relative_humidity_2m}%
+          {Math.round(weather?.current.apparent_temperature ?? 0)}°{' '}
+          {weather?.current.relative_humidity_2m ?? '--'}%
         </p>
       </div>
       <div className={styles.details}>

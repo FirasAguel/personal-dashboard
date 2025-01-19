@@ -1,5 +1,4 @@
-const nextJest = require('next/jest');
-const { defaults: tsjPreset } = require('ts-jest/presets');
+import nextJest from 'next/jest';
 
 const createJestConfig = nextJest({
   dir: './', // Path to your Next.js app
@@ -13,4 +12,4 @@ const customJestConfig = {
   },
 };
 
-module.exports = createJestConfig(customJestConfig);
+export default createJestConfig(customJestConfig);
