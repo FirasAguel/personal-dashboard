@@ -1,5 +1,5 @@
-import React from "react";
-import WeatherWidget from "./WeatherWidget";
+import React from 'react';
+import WeatherWidget from './WeatherWidget';
 
 export default function Dashboard() {
   return (

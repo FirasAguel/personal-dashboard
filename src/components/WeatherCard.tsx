@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./WeatherCard.module.css"; // CSS Module for styling
+import React from 'react';
+import styles from './WeatherCard.module.css'; // CSS Module for styling
 
 interface WeatherData {
   temperature: number; // Current temperature
@@ -8,7 +8,12 @@ interface WeatherData {
   icon: string; // Icon URL or identifier
 }
 
-const WeatherCard: React.FC<WeatherData> = ({ temperature, humidity, condition, icon }) => {
+const WeatherCard: React.FC<WeatherData> = ({
+  temperature,
+  humidity,
+  condition,
+  icon,
+}) => {
   return (
     <div className={styles.card}>
       <div className={styles.header}>

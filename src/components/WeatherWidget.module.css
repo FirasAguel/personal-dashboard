@@ -10,19 +10,29 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 16px;
   text-align: center;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .weather-widget.day {
-  background: linear-gradient(135deg, #87ceeb, #f0e68c); /* Sky blue to light yellow */
+  background: linear-gradient(
+    135deg,
+    #87ceeb,
+    #f0e68c
+  ); /* Sky blue to light yellow */
   color: #333; /* Darker text color for better contrast */
 }
 
 .weather-widget.night {
-  background: linear-gradient(135deg, #2c3e50, #1c2833); /* Dark blue to black */
+  background: linear-gradient(
+    135deg,
+    #2c3e50,
+    #1c2833
+  ); /* Dark blue to black */
   color: #ddd; /* Lighter text color */
 }
 
@@ -37,7 +47,7 @@
 
 .weather-widget h2 {
   font-size: 1.8rem;
-  margin-bottom: .4em;
+  margin-bottom: 0.4em;
 }
 
 .weather-widget p {
@@ -51,7 +61,9 @@
   line-height: 1.5;
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .minimal p {

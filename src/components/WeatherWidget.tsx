@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
-import styles from "./WeatherWidget.module.css";
-import { cityCoordinates } from "../../config/cityCoordinates";
+import React, { useState, useEffect } from 'react';
+import styles from './WeatherWidget.module.css';
+import { cityCoordinates } from '../../config/cityCoordinates';
 
 interface WeatherWidgetProps {
   city: string;
 }
 
-const fetchCoordinates = (city: string) => cityCoordinates[city] || { latitude: 0, longitude: 0 };
+const fetchCoordinates = (city: string) =>
+  cityCoordinates[city] || { latitude: 0, longitude: 0 };
 
 const getCurrentTimeFromGMT = (gmtOffset: string): string => {
+  const normalizedOffset = gmtOffset === 'GMT' ? 'GMT+0' : gmtOffset;
 
-  const normalizedOffset = gmtOffset === "GMT" ? "GMT+0" : gmtOffset;
-
-  const offsetInHours = parseInt(normalizedOffset.replace("GMT", ""), 10);
+  const offsetInHours = parseInt(normalizedOffset.replace('GMT', ''), 10);
 
   const now = new Date();
   const utcTime = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
 
   const localTime = new Date(utcTime + offsetInHours * 60 * 60 * 1000);
 
-  const hours = localTime.getHours().toString().padStart(2, "0");
-  const minutes = localTime.getMinutes().toString().padStart(2, "0");
+  const hours = localTime.getHours().toString().padStart(2, '0');
+  const minutes = localTime.getMinutes().toString().padStart(2, '0');
 
   return `${hours}:${minutes}`;
 };
@@ -36,14 +36,17 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
     const fetchWeather = async () => {
       try {
         setLoading(true);
-        if(latitude===0 && longitude === 0) //大西洋の中
+        if (latitude === 0 && longitude === 0)
+          //大西洋の中
           throw new Error(`${city} is not supported`);
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation&hourly=temperature_2m&&daily=sunrise,sunset&timezone=auto`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         setWeather(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch weather data");
+        setError(
+          err instanceof Error ? err.message : 'Failed to fetch weather data'
+        );
       } finally {
         setLoading(false);
       }
@@ -53,19 +56,27 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
   }, [city]);
 
   if (loading) {
-    return <div className={`${styles['weather-widget']} widget`}>Loading weather for {city}...</div>;
+    return (
+      <div className={`${styles['weather-widget']} widget`}>
+        Loading weather for {city}...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className={`${styles['weather-widget']} widget`}>Error: {error}</div>;
+    return (
+      <div className={`${styles['weather-widget']} widget`}>Error: {error}</div>
+    );
   }
 
   return (
-    <div className={`${styles['weather-widget']} widget ${weather?.current.is_day === 1 ? styles.day : styles.night}`}>
+    <div
+      className={`${styles['weather-widget']} widget ${weather?.current.is_day === 1 ? styles.day : styles.night}`}
+    >
       <div className={styles.minimal}>
         <h2>{city}</h2>
         <h3>{getCurrentTimeFromGMT(weather?.timezone_abbreviation)}</h3>
-        <p className={styles.hideOnHover}> 
+        <p className={styles.hideOnHover}>
           {Math.round(weather?.current.apparent_temperature)}°{' '}
           {weather?.current.relative_humidity_2m}%
         </p>
