@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+      - feat/*
+      - test/*
+  pull_request:
+    branches:
+      - main
 
 jobs:
   lint-and-test:
@@ -19,26 +24,35 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
 
-      # Step 3: Install dependencies
+      # Step 3: Install pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Verify pnpm installation
+      - name: Verify pnpm
+        run: pnpm --version
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Step 4: Run Prettier
+      # Step 5: Run Prettier
       - name: Run Prettier
         run: pnpm prettier --check .
 
-      # Step 5: Run ESLint
+      # Step 6: Run ESLint
       - name: Run ESLint
         run: pnpm eslint .
 
-      # Step 6: Run tests
+      # Step 7: Run Jest tests
       - name: Run Jest tests
         run: pnpm test
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: lint-and-test
 
     steps:
@@ -51,13 +65,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
 
-      # Step 3: Install dependencies
+      # Step 3: Set up pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Verify pnpm installation
+      - name: Verify pnpm
+        run: pnpm --version
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Step 4: Build the app
+      # Step 5: Build the app
       - name: Build the app
         run: pnpm build
 
