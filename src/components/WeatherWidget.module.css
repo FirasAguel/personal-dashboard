@@ -1,0 +1,106 @@
+.weather-widget {
+  /*
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #fff; /* Default text color */
+  /* max-width: 400px; 
+  max-height: 300px; 
+  min-height: 150px; */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  text-align: center;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.weather-widget.day {
+  background: linear-gradient(
+    135deg,
+    #87ceeb,
+    #f0e68c
+  ); /* Sky blue to light yellow */
+  color: #333; /* Darker text color for better contrast */
+}
+
+.weather-widget.night {
+  background: linear-gradient(
+    135deg,
+    #2c3e50,
+    #1c2833
+  ); /* Dark blue to black */
+  color: #ddd; /* Lighter text color */
+}
+
+/* Optional: Add hover effects */
+.weather-widget.day:hover {
+  background: linear-gradient(135deg, #add8e6, #ffe4b5); /* Slightly lighter */
+}
+
+.weather-widget.night:hover {
+  background: linear-gradient(135deg, #34495e, #1b2631); /* Slightly lighter */
+}
+
+.weather-widget h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.4em;
+}
+
+.weather-widget p {
+  font-size: 1rem;
+  margin: 4px 0;
+}
+
+/* Minimal view: Always visible */
+.minimal {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.minimal p {
+  font-size: 1.2rem;
+}
+
+.weather-widget:hover .minimal {
+  line-height: inherit;
+  transform: translateY(-10px); /* Slide up */
+}
+
+.details {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: height 0.3s ease;
+}
+
+.weather-widget:hover .details {
+  animation: slideIn 0.3s ease forwards; /* Trigger slide-in animation */
+  height: auto;
+  opacity: 1;
+}
+
+.weather-widget:hover .hideOnHover {
+  height: 0;
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px); /* Start slightly above */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Settle in place */
+  }
+}
