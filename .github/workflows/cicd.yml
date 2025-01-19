@@ -30,7 +30,7 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 8 # Ensure the latest version of pnpm is installed
-      
+
       # Verify pnpm installation
       - name: Verify pnpm
         run: pnpm --version
@@ -65,7 +65,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
+          cache: "pnpm"
 
       # Step 3: Install dependencies
       - name: Install dependencies
