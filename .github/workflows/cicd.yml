@@ -30,28 +30,19 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      # Step 4: Cache pnpm store
-      - name: Cache pnpm store
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      # Step 5: Install dependencies
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Step 6: Run Prettier
+      # Step 5: Run Prettier
       - name: Run Prettier
         run: pnpm prettier --check .
 
-      # Step 7: Run ESLint
+      # Step 6: Run ESLint
       - name: Run ESLint
         run: pnpm eslint .
 
-      # Step 8: Run Jest tests
+      # Step 7: Run Jest tests
       - name: Run Jest tests
         run: pnpm test
 
