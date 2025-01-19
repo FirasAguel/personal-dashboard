@@ -29,7 +29,7 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8 # Ensure the latest version of pnpm is installed
+          version: 8
 
       # Verify pnpm installation
       - name: Verify pnpm
@@ -65,13 +65,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
 
-      # Step 3: Install dependencies
+      # Step 3: Set up pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Verify pnpm installation
+      - name: Verify pnpm
+        run: pnpm --version
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Step 4: Build the app
+      # Step 5: Build the app
       - name: Build the app
         run: pnpm build
 
