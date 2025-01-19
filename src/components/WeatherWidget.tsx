@@ -53,7 +53,6 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city }) => {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation&hourly=temperature_2m&&daily=sunrise,sunset&timezone=auto`;
         const response = await fetch(apiUrl);
         const data = await response.json();
-        console.log(data);
         setWeather(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch weather data");
