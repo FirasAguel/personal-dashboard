@@ -103,4 +103,4 @@ jobs:
         run: |
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
-          rsync -avz -e "ssh -i ssh_key" ./out/ $USER@$HOST:/var/www/dashboard/
+          rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
