@@ -7,3 +7,6 @@ First, run the development server:
 ```bash
 pnpm dev
 ```
+## Deployment
+
+This is currently deployed on dashboard.firas.jp
