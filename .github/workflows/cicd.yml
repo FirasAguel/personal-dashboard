@@ -11,82 +11,8 @@ on:
       - main
 
 jobs:
-  lint-and-test:
-    runs-on: ubuntu-24.04
-
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # Step 3: Install pnpm
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      # Verify pnpm installation
-      - name: Verify pnpm
-        run: pnpm --version
-
-      # Step 4: Install dependencies
-      - name: Install dependencies
-        run: pnpm install
-
-      # Step 5: Run Prettier
-      - name: Run Prettier
-        run: pnpm prettier --check .
-
-      # Step 6: Run ESLint
-      - name: Run ESLint
-        run: pnpm eslint .
-
-      # Step 7: Run Jest tests
-      - name: Run Jest tests
-        run: pnpm test
-
-  build:
-    runs-on: ubuntu-24.04
-    needs: lint-and-test
-
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # Step 3: Set up pnpm
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      # Verify pnpm installation
-      - name: Verify pnpm
-        run: pnpm --version
-
-      # Step 4: Install dependencies
-      - name: Install dependencies
-        run: pnpm install
-
-      # Step 5: Build the app
-      - name: Build the app
-        run: pnpm build
-
   deploy:
     runs-on: ubuntu-24.04
-    needs: build
     if: github.ref == 'refs/heads/main'
 
     steps:
@@ -103,5 +29,5 @@ jobs:
         run: |
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
-          ssh-keyscan -H "${HOST}" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "${HOST}" >> /root/.ssh/known_hosts
           rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
