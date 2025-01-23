@@ -1,4 +1,4 @@
-This is a dashboard for widgets made as a React practice project.
+This is a dashboard for widgets made as a React practice project and to learn testing and ci/cd.
 
 ## Getting Started
 
