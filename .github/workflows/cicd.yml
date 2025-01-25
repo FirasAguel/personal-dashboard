@@ -24,6 +24,7 @@ jobs:
       - name: Debug Project Structure
         run: |
           echo "Project root contents:"
+          pwd
           ls -la
           echo "Contents of ./out:"
           ls -la out
