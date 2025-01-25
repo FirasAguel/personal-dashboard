@@ -45,13 +45,13 @@
           var t, i, d;
           let { city: s } = e,
             [u, c] = (0, l.useState)(null),
-            [h, _] = (0, l.useState)(!0),
-            [g, m] = (0, l.useState)(null),
+            [h, g] = (0, l.useState)(!0),
+            [_, m] = (0, l.useState)(null),
             { latitude: p, longitude: v } = r(s);
           return ((0, l.useEffect)(() => {
             (async () => {
               try {
-                if ((_(!0), 0 === p && 0 === v))
+                if ((g(!0), 0 === p && 0 === v))
                   throw Error(''.concat(s, ' is not supported'));
                 let e = 'https://api.open-meteo.com/v1/forecast?latitude='
                     .concat(p, '&longitude=')
@@ -69,7 +69,7 @@
                     : 'Failed to fetch weather data'
                 );
               } finally {
-                _(!1);
+                g(!1);
               }
             })();
           }, [s]),
@@ -78,10 +78,10 @@
                 className: ''.concat(n()['weather-widget'], ' widget'),
                 children: ['Loading weather for ', s, '...'],
               })
-            : g
+            : _
               ? (0, a.jsxs)('div', {
                   className: ''.concat(n()['weather-widget'], ' widget'),
-                  children: ['Error: ', g],
+                  children: ['Error: ', _],
                 })
               : (0, a.jsxs)('div', {
                   className: ''
@@ -181,7 +181,7 @@
         };
       var c = i(9831),
         h = i.n(c);
-      let _ = (e) => {
+      let g = (e) => {
           let { onClose: t, children: i, visible: l } = e;
           return (0, a.jsx)('div', {
             className: ''
@@ -202,14 +202,14 @@
             }),
           });
         },
-        g = Object.keys(s).sort();
+        _ = Object.keys(s).sort();
       function m() {
         let [e, t] = (0, l.useState)(!1),
-          [i, d] = (0, l.useState)(['Gabes', 'Tokyo', 'Paris', 'Atlantis']),
+          [i, d] = (0, l.useState)(['Gabes', 'Tokyo', 'Paris', 'Asgard']),
           [n, s] = (0, l.useState)('');
         return (0, a.jsxs)(a.Fragment, {
           children: [
-            (0, a.jsxs)(_, {
+            (0, a.jsxs)(g, {
               onClose: () => t(!1),
               visible: e,
               children: [
@@ -222,7 +222,7 @@
                         s(e.target.value);
                       },
                       children: [
-                        g.map((e, t) =>
+                        _.map((e, t) =>
                           (0, a.jsx)('option', { value: e, children: e }, t)
                         ),
                         (0, a.jsx)('option', {

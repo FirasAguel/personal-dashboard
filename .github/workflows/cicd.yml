@@ -84,6 +84,12 @@ jobs:
       - name: Build the app
         run: pnpm build
 
+      # Step 6: Debug Build Output
+      - name: Debug Build Output
+        run: |
+          echo "Contents of ./out:"
+          ls -la out
+
   deploy:
     runs-on: ubuntu-24.04
     needs: build
@@ -103,7 +109,7 @@ jobs:
           echo "Contents of ./out:"
           ls -la out
 
-      # Step 2: Configure SSH
+      # Step 3: Configure SSH
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh  # Ensure .ssh directory exists
@@ -116,10 +122,10 @@ jobs:
           HOST: ${{ secrets.SSH_HOST }}
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Deploy with rsync
+      # Step 4: Deploy with rsync
       - name: Deploy to VPS
         run: |
-          rsync -avz -e "ssh -i ssh_key" out/ ${USER}@${HOST}:/var/www/dashboard/
+          rsync -avz --delete -e "ssh -i ssh_key" out/ ${SSH_USER}@${SSH_HOST}:/var/www/dashboard/
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USER: ${{ secrets.SSH_USER }}
