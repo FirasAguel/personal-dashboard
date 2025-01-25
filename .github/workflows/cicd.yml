@@ -51,7 +51,7 @@ jobs:
       - name: Run Jest tests
         run: pnpm test
 
-  build:
+  build-and-deploy:
     runs-on: ubuntu-24.04
     needs: lint-and-test
     if: github.ref == 'refs/heads/main'
@@ -84,25 +84,22 @@ jobs:
 
       # Step 5: Build the app
       - name: Build the app
-        run: pnpm build
+        run: |
+          rm -rf out  # Ensure no stale builds
+          pnpm build
+          echo "Build output contents:"
+          ls -la out || echo "out/ directory not created"
 
       # Step 6: Debug Build Output
       - name: Debug Build Output
         run: |
-          echo "Build output contents:"
-          ls -la out
-          grep -R "Asgard" out || echo "Keyword not found in build output"
+          echo "Verifying keyword in build output:"
+          grep -R "Asgard" out || echo "Asgard not found in build output"
 
-      # Step 1: Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      # Step 2: Configure SSH
+      # Step 7: Configure SSH
       - name: Configure SSH
         run: |
-          mkdir -p ~/.ssh  # Ensure .ssh directory exists
+          mkdir -p ~/.ssh
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh-keyscan -H ${HOST} >> ~/.ssh/known_hosts
@@ -110,8 +107,9 @@ jobs:
           HOST: ${{ secrets.SSH_HOST }}
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Deploy with rsync
+      # Step 8: Deploy with rsync
       - name: Deploy to VPS
+        if: github.ref == 'refs/heads/main' # Only deploy from main branch
         run: |
           rsync -avz --delete -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
           ssh -i ssh_key ${USER}@${HOST} "ls -la /var/www/dashboard/; grep -R 'Asgard' /var/www/dashboard/ || echo 'Keyword not found in deployed files'"
