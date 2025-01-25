@@ -30,6 +30,7 @@ export default [
   {
     ignores: [
       '.next', // Ignore .next directory
+      'out',
       'node_modules', // Ignore node_modules explicitly (optional)
     ],
   },
