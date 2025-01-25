@@ -90,7 +90,7 @@ jobs:
         run: |
           echo "Build output contents:"
           ls -la out
-          grep -R "your-keyword" out || echo "Keyword not found in build output"
+          grep -R "Asgard" out || echo "Keyword not found in build output"
 
   deploy:
     runs-on: ubuntu-24.04
@@ -104,17 +104,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Step 2: Debug Project Structure
-      - name: Debug Project Structure
-        run: |
-          echo "Project root contents:"
-          pwd
-          ls -la
-          echo "Contents of ./out:"
-          ls -la out
-          grep -R "Asgard" out || echo "Asgard not found in build output"
-
-      # Step 3: Configure SSH
+      # Step 2: Configure SSH
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh  # Ensure .ssh directory exists
@@ -125,10 +115,11 @@ jobs:
           HOST: ${{ secrets.SSH_HOST }}
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 4: Deploy with rsync
+      # Step 3: Deploy with rsync
       - name: Deploy to VPS
         run: |
           rsync -avz --delete -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
+          ssh -i ssh_key ${USER}@${HOST} "ls -la /var/www/dashboard/; grep -R 'Asgard' /var/www/dashboard/ || echo 'Keyword not found in deployed files'"
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USER: ${{ secrets.SSH_USER }}
