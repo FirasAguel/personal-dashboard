@@ -23,10 +23,11 @@ jobs:
       # Step 2:
       - name: Deploy via rsync
         env:
-          HOST: ${{ secrets.HOST }}
-          USER: ${{ secrets.USER }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          mkdir -p ~/.ssh  # Ensure .ssh directory exists
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh-keyscan -H "${HOST}" >> ~/.ssh/known_hosts
