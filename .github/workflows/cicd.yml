@@ -31,3 +31,5 @@ jobs:
           chmod 600 ssh_key
           ssh-keyscan -H "${HOST}" >> ~/.ssh/known_hosts
           rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
+
+        #updated github secrets
