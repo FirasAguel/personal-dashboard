@@ -22,9 +22,12 @@ jobs:
 
       # Step 2:
       - name: Deploy via rsync
-        run: |
-          rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
         env:
           HOST: ${{ secrets.HOST }}
           USER: ${{ secrets.USER }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          echo "${PRIVATE_KEY}" > ssh_key
+          chmod 600 ssh_key
+          ssh-keyscan -H "${HOST}" >> ~/.ssh/known_hosts
+          rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
