@@ -26,7 +26,7 @@ jobs:
           echo "Project root contents:"
           ls -la
           echo "Contents of ./out:"
-          ls -la ./out
+          ls -la out
 
       # Step 2: Configure SSH
       - name: Configure SSH
@@ -44,7 +44,7 @@ jobs:
       # Step 3: Deploy with rsync
       - name: Deploy to VPS
         run: |
-          rsync -avz -e "ssh -i ssh_key -vvv" ./out/ ${USER}@${HOST}:/var/www/dashboard/
+          rsync -avz -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USER: ${{ secrets.SSH_USER }}
