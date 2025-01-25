@@ -56,9 +56,10 @@ jobs:
     needs: lint-and-test
 
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
+      - name: Checkout latest code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
@@ -87,8 +88,9 @@ jobs:
       # Step 6: Debug Build Output
       - name: Debug Build Output
         run: |
-          echo "Contents of ./out:"
+          echo "Build output contents:"
           ls -la out
+          grep -R "your-keyword" out || echo "Keyword not found in build output"
 
   deploy:
     runs-on: ubuntu-24.04
@@ -99,6 +101,8 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Step 2: Debug Project Structure
       - name: Debug Project Structure
@@ -108,6 +112,7 @@ jobs:
           ls -la
           echo "Contents of ./out:"
           ls -la out
+          grep -R "Asgard" out || echo "Asgard not found in build output"
 
       # Step 3: Configure SSH
       - name: Configure SSH
@@ -116,16 +121,14 @@ jobs:
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
           ssh-keyscan -H ${HOST} >> ~/.ssh/known_hosts
-          ls -la ~/.ssh  # Debugging to check contents of .ssh directory
-          cat ~/.ssh/known_hosts  # Debugging to ensure known_hosts was updated correctly
         env:
-          HOST: ${{ secrets.SSH_HOST }}
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${HOST}
+          PRIVATE_KEY: ${USER}
 
       # Step 4: Deploy with rsync
       - name: Deploy to VPS
         run: |
-          rsync -avz --delete -e "ssh -i ssh_key" out/ ${SSH_USER}@${SSH_HOST}:/var/www/dashboard/
+          rsync -avz --delete -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USER: ${{ secrets.SSH_USER }}
