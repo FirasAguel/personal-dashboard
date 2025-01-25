@@ -20,6 +20,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Debug Project Structure
+      - name: Debug Project Structure
+        run: |
+          echo "Project root contents:"
+          ls -la
+          echo "Contents of ./out:"
+          ls -la ./out
+
       # Step 2: Configure SSH
       - name: Configure SSH
         run: |
