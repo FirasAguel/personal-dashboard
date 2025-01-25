@@ -20,14 +20,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Deploy to VPS
-      - name: Deploy to VPS
-        env:
-          HOST: ${{ secrets.SSH_HOST }}
-          USER: ${{ secrets.SSH_USER }}
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      # Step 2:
+      - name: Setup SSH
         run: |
+          mkdir -p ~/.ssh
           echo "${PRIVATE_KEY}" > ssh_key
           chmod 600 ssh_key
-          ssh-keyscan -H "${HOST}" >> /root/.ssh/known_hosts
+          ssh-keyscan -H "${HOST}" >> ~/.ssh/known_hosts
+
+      # Step 3:
+      - name: Deploy via rsync
+        run: |
           rsync -avz -e "ssh -i ssh_key" ./out/ ${USER}@${HOST}:/var/www/dashboard/
+        env:
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
