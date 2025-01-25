@@ -119,7 +119,7 @@ jobs:
       # Step 3: Deploy with rsync
       - name: Deploy to VPS
         run: |
-          rsync -avz -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
+          rsync -avz -e "ssh -i ssh_key" out/ ${USER}@${HOST}:/var/www/dashboard/
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USER: ${{ secrets.SSH_USER }}
