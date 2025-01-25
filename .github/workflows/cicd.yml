@@ -79,7 +79,7 @@ jobs:
 
       # Step 4: Install dependencies
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       # Step 5: Build the app
       - name: Build the app
@@ -122,8 +122,8 @@ jobs:
           chmod 600 ssh_key
           ssh-keyscan -H ${HOST} >> ~/.ssh/known_hosts
         env:
-          HOST: ${HOST}
-          PRIVATE_KEY: ${USER}
+          HOST: ${{ secrets.SSH_HOST }}
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # Step 4: Deploy with rsync
       - name: Deploy to VPS
