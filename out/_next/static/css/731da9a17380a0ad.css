@@ -1,0 +1,120 @@
+.WeatherWidget_weather-widget__fiWsq {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  text-align: center;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.WeatherWidget_weather-widget__fiWsq.WeatherWidget_day__DxjHP {
+  background: linear-gradient(135deg, #87ceeb, khaki);
+  color: #333;
+}
+.WeatherWidget_weather-widget__fiWsq.WeatherWidget_night__U46Mr {
+  background: linear-gradient(135deg, #2c3e50, #1c2833);
+  color: #ddd;
+}
+.WeatherWidget_weather-widget__fiWsq.WeatherWidget_day__DxjHP:hover {
+  background: linear-gradient(135deg, #add8e6, #ffe4b5);
+}
+.WeatherWidget_weather-widget__fiWsq.WeatherWidget_night__U46Mr:hover {
+  background: linear-gradient(135deg, #34495e, #1b2631);
+}
+.WeatherWidget_weather-widget__fiWsq h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.4em;
+}
+.WeatherWidget_weather-widget__fiWsq p {
+  font-size: 1rem;
+  margin: 4px 0;
+}
+.WeatherWidget_minimal__j3kNV {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+.WeatherWidget_minimal__j3kNV p {
+  font-size: 1.2rem;
+}
+.WeatherWidget_weather-widget__fiWsq:hover .WeatherWidget_minimal__j3kNV {
+  line-height: inherit;
+  transform: translateY(-10px);
+}
+.WeatherWidget_details__q0ok8 {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: height 0.3s ease;
+}
+.WeatherWidget_weather-widget__fiWsq:hover .WeatherWidget_details__q0ok8 {
+  animation: WeatherWidget_slideIn__NU__n 0.3s ease forwards;
+  height: auto;
+  opacity: 1;
+}
+.WeatherWidget_weather-widget__fiWsq:hover .WeatherWidget_hideOnHover__AgCrT {
+  height: 0;
+  opacity: 0;
+}
+@keyframes WeatherWidget_slideIn__NU__n {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.Modal_modalOverlay__2EqPc {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition:
+    opacity 0.25s ease-in,
+    visibility 0.25s ease-in;
+}
+.Modal_modalContent__cPdxT {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.Modal_closeButton__YjHCd {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #000;
+}
+.Modal_show__W9hUS {
+  visibility: visible;
+  opacity: 1;
+}
+.Modal_hide__gq_r7 {
+  visibility: hidden;
+  opacity: 0;
+}
