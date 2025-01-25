@@ -54,6 +54,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout latest code
@@ -92,12 +93,6 @@ jobs:
           ls -la out
           grep -R "Asgard" out || echo "Keyword not found in build output"
 
-  deploy:
-    runs-on: ubuntu-24.04
-    needs: build
-    if: github.ref == 'refs/heads/main'
-
-    steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
