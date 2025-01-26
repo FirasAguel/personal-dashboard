@@ -111,7 +111,7 @@ jobs:
       - name: Deploy to VPS
         if: github.ref == 'refs/heads/main' # Only deploy from main branch
         run: |
-          rsync -avz --delete -e "ssh -i ssh_key -vvv" out/ ${USER}@${HOST}:/var/www/dashboard/
+          rsync -avz --delete -e "ssh -i ssh_key" out/ ${USER}@${HOST}:/var/www/dashboard/
           ssh -i ssh_key ${USER}@${HOST} "ls -la /var/www/dashboard/; grep -R 'Asgard' /var/www/dashboard/ || echo 'Keyword not found in deployed files'"
         env:
           HOST: ${{ secrets.SSH_HOST }}
