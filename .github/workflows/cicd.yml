@@ -85,16 +85,16 @@ jobs:
       # Step 5: Build the app
       - name: Build the app
         run: |
-          rm -rf out  # Ensure no stale builds
+          # rm -rf out  # Ensure no stale builds
           pnpm build
           echo "Build output contents:"
           ls -la out || echo "out/ directory not created"
 
       # Step 6: Debug Build Output
-      - name: Debug Build Output
-        run: |
-          echo "Verifying keyword in build output:"
-          grep -R "Asgard" out || echo "Asgard not found in build output"
+      # - name: Debug Build Output
+      #   run: |
+      #     echo "Verifying keyword in build output:"
+      #     grep -R "Asgard" out || echo "Asgard not found in build output"
 
       # Step 7: Configure SSH
       - name: Configure SSH
