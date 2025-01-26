@@ -6,6 +6,7 @@ on:
       - main
       - feat/*
       - test/*
+      - dockerize
   pull_request:
     branches:
       - main
@@ -54,66 +55,35 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-24.04
     needs: lint-and-test
-    if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout latest code
+      # Step 1: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v3
+
+      # Step 2: Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          fetch-depth: 0
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # Step 3: Set up pnpm
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      # Verify pnpm installation
-      - name: Verify pnpm
-        run: pnpm --version
-
-      # Step 4: Install dependencies
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # Step 5: Build the app
-      - name: Build the app
+      # Step 3: Build and push Docker image
+      - name: Build and push Docker image
         run: |
-          # rm -rf out  # Ensure no stale builds
-          pnpm build
-          echo "Build output contents:"
-          ls -la out || echo "out/ directory not created"
+          docker build -t ghcr.io/${{ github.repository_owner }}/personal-dashboard:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/personal-dashboard:latest
 
-      # Step 6: Debug Build Output
-      # - name: Debug Build Output
-      #   run: |
-      #     echo "Verifying keyword in build output:"
-      #     grep -R "Asgard" out || echo "Asgard not found in build output"
-
-      # Step 7: Configure SSH
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${PRIVATE_KEY}" > ssh_key
-          chmod 600 ssh_key
-          ssh-keyscan -H ${HOST} >> ~/.ssh/known_hosts
-        env:
-          HOST: ${{ secrets.SSH_HOST }}
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      # Step 8: Deploy with rsync
+      # Step 4: Deploy to VPS
       - name: Deploy to VPS
-        if: github.ref == 'refs/heads/main' # Only deploy from main branch
-        run: |
-          rsync -avz --delete -e "ssh -i ssh_key" out/ ${USER}@${HOST}:/var/www/dashboard/
-          ssh -i ssh_key ${USER}@${HOST} "ls -la /var/www/dashboard/; grep -R 'Asgard' /var/www/dashboard/ || echo 'Keyword not found in deployed files'"
-        env:
-          HOST: ${{ secrets.SSH_HOST }}
-          USER: ${{ secrets.SSH_USER }}
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            docker pull ghcr.io/${{ github.repository_owner }}/personal-dashboard:latest
+            docker stop personal-dashboard || true
+            docker rm personal-dashboard || true
+            docker run -d --name personal-dashboard -p 3000:3000 ghcr.io/${{ github.repository_owner }}/personal-dashboard:latest
