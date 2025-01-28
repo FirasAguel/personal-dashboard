@@ -1,0 +1,92 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feat/*
+      - test/*
+      - dockerize
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Verify pnpm installation
+      - name: Verify pnpm
+        run: pnpm --version
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: pnpm install
+
+      # Step 5: Run Prettier
+      - name: Run Prettier
+        run: pnpm prettier --check .
+
+      # Step 6: Run ESLint
+      - name: Run ESLint
+        run: pnpm eslint .
+
+      # Step 7: Run Jest tests
+      - name: Run Jest tests
+        run: pnpm test
+
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+    needs: lint-and-test
+    permissions:
+      packages: write
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      # Step 3: Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          docker buildx build --no-cache --platform linux/amd64 -t ghcr.io/firasaguel/personal-dashboard:latest .
+          docker push ghcr.io/firasaguel/personal-dashboard:latest
+
+      # Step 4: Deploy to VPS
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker pull ghcr.io/firasaguel/personal-dashboard:latest
+            docker stop personal-dashboard || true
+            docker rm personal-dashboard || true
+            docker run -d --name personal-dashboard -p 3000:3000 ghcr.io/firasaguel/personal-dashboard:latest
