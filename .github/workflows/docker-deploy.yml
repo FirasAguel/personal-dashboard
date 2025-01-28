@@ -85,7 +85,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker pull ghcr.io/firasaguel/personal-dashboard:latest
             docker stop personal-dashboard || true
             docker rm personal-dashboard || true
-            docker run --pull always -d --name personal-dashboard -p 3000:3000 ghcr.io/firasaguel/personal-dashboard:latest
+            docker run -d --name personal-dashboard -p 3000:3000 ghcr.io/firasaguel/personal-dashboard:latest
