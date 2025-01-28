@@ -13,7 +13,7 @@ export default function Home() {
     'Gabes',
     'Tokyo',
     'Paris',
-    'Asgard',
+    'Bikini Bottom',
   ]);
   const [selectedCity, setSelectedCity] = useState('');
 
