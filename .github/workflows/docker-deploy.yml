@@ -88,4 +88,4 @@ jobs:
             docker pull ghcr.io/firasaguel/personal-dashboard:latest
             docker stop personal-dashboard || true
             docker rm personal-dashboard || true
-            docker run -d --name personal-dashboard -p 3000:3000 ghcr.io/firasaguel/personal-dashboard:latest
+            docker run --pull always -d --name personal-dashboard -p 3000:3000 ghcr.io/firasaguel/personal-dashboard:latest
